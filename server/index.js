@@ -40,7 +40,7 @@ app.use("/alive", function (req, res, next) {
 app.use(version, routes.authApi);
 app.use(version, routes.followApi);
 app.use(version, routes.postsApi);
-//app.use(version, routes.feedsApi);
+app.use(version, routes.feedsApi);
 
 // Start web server
 app.listen(port);

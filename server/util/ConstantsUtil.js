@@ -7,7 +7,9 @@ var consts = {
     posts: "posts",
     newsFeeds: "feeds",
     tweetIdKey: "tweets",
-    tweetPrefix: "tweet"
+    tweetPrefix: "tweet",
+    feedSize: 100,
+    maxTweetSize: 140
 };
 
 module.exports = consts;
