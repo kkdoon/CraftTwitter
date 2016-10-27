@@ -1,0 +1,40 @@
+<div class="col-md-10 col-md-offset-2">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <p style="margin-bottom: 0;" class="lead">People you follow</p>
+    </li>
+    <li class="list-group-item" ng-repeat="userid in userIDs">
+      <div class="row">
+        <div class="col-sm-9">
+          <h4 class="list-group-item-heading">
+            <p class="list-group-item-text">
+              <p class="text-muted">@{{userid}}</p>
+            </p>
+          </h4>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="col-md-10 col-md-offset-2">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <p style="margin-bottom: 0;" class="lead">People you don't follow</p>
+    </li>
+    <li class="list-group-item" ng-repeat="userid in userIDs">
+      <div class="row">
+        <div class="col-sm-9">
+          <h4 class="list-group-item-heading">
+            <p class="list-group-item-text">
+            <p class="text-muted">@{{userid}}</p>
+            </p>
+          </h4>
+        </div>
+        <div style="padding-top: 3px; padding-bottom: 3px;" class="col-sm-3">
+            <button type="submit" class="btn btn-default pull-right">Follow</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
