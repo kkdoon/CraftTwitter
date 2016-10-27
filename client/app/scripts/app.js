@@ -23,21 +23,6 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
-      })
-      .when('/home', {
-        templateUrl: 'views/home.html',
-        controller: 'HomeCtrl',
-        controllerAs: 'home'
-      })
-      .when('/posts', {
-        templateUrl: 'views/posts.html',
-        controller: 'PostsCtrl',
-        controllerAs: 'posts'
-      })
       .when('/sign', {
         templateUrl: 'views/sign.html',
         controller: 'SignCtrl',
