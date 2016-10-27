@@ -36,12 +36,22 @@ router.get('/user/:userID/feed', function (req, res) {
                 res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
                 return;
             }
-            cacheClient.mget(replies, function (err, replies) {
+            cacheClient.hmget(constants.tweetMap, replies, function (err, replies1) {
                 if (err) {
                     res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
                     return;
                 }
-                res.send(replies);
+                cacheClient.hmget(constants.tweetUserMap, replies, function (err, replies2) {
+                    if (err) {
+                        res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
+                        return;
+                    }
+                    var response = [];
+                    for(var index = 0; index < replies1.length; index++){
+                        response.push({userID: replies2[index], tweet: replies1[index]});
+                    }
+                    res.send(response);
+                });
             });
         });
     });

@@ -4,8 +4,8 @@
       <p style="margin-bottom: 0;" class="lead">News Feed</p>
     </li>
     <li class="list-group-item" ng-repeat="tweet in tweets"><p class="list-group-item-heading">
-      <p class="text-gray-dark"><span class="text-muted">@kk</span></p>
-      <p style="word-wrap: break-word;" class="list-group-item-text">{{ tweet }}</p>
+      <p class="text-gray-dark"><span class="text-muted">{{tweet.userID}}</span></p>
+      <p style="word-wrap: break-word;" class="list-group-item-text">{{ tweet.tweet }}</p>
     </li>
 
   </ul>

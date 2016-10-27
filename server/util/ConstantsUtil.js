@@ -8,6 +8,8 @@ var consts = {
     newsFeeds: "feeds",
     tweetIdKey: "tweets",
     tweetPrefix: "tweet",
+    tweetMap: "tweetMap",
+    tweetUserMap: "tweetUserMap",
     feedSize: 100,
     maxTweetSize: 140
 };

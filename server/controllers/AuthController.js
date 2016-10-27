@@ -45,6 +45,7 @@ router.post('/login', function (req, res) {
     var userName = req.body.username;
     var password = req.body.password;
 
+    //console.log(userName + "," + password);
     if(!isRequestValid(userName, password)){
         res.status(400).send(JSON.stringify({msg: "Username and password cannot be empty", err: "Failed to sign-in user"}));
         return;

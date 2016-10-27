@@ -8,8 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('FeedCtrl', function ($scope, Restangular) {
-    Restangular.all('user/kk/feed').getList().then(function(result) {
-      $scope.tweets = result;
-    });
+  .controller('FeedCtrl', function ($scope, Restangular, $cookies) {
+    var userId = $cookies.userID;
+    $scope.tweets = Restangular.all('user/' + userId + '/feed').getList().$object;
   });

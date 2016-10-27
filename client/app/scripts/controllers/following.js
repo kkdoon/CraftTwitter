@@ -8,18 +8,19 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('FollowingCtrl', function ($scope, Restangular) {
-    Restangular.all('/user/kk/follow').getList().then(function(result) {
+  .controller('FollowingCtrl', function ($scope, Restangular, $cookies) {
+    var userId = $cookies.userID;
+    Restangular.all('/user/' + userId + '/follow').getList().then(function(result) {
       $scope.userIDs = result;
     });
-    Restangular.all('/users?user=kk').getList().then(function(result) {
+    Restangular.all('/users?user=' + userId).getList().then(function(result) {
       $scope.nonFollowUserIDs = result;
     });
 
     $("#nonFollowList").on("click","button",function(){
-      var userID = this.id;
-      Restangular.all('/user/kk/follow?user=' + userID).post().then(function() {
-        Restangular.all('/user/kk/follow').getList().then(function(result) {
+      var followerID = this.id;
+      Restangular.all('/user/' + userId + '/follow?user=' + followerID).post().then(function() {
+        Restangular.all('/user/' + userId + '/follow').getList().then(function(result) {
             $scope.userIDs = result;
           });
         }, function(err) {

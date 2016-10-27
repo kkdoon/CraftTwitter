@@ -8,11 +8,10 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('MainCtrl', function ($scope, Restangular) {
-    var baseUrl = Restangular.all('user/kk/post');
-    baseUrl.getList().then(function(result) {
-      $scope.tweets = result;
-    });
+  .controller('MainCtrl', function ($scope, Restangular, $cookies) {
+    var userId = $cookies.userID;
+    var baseUrl = Restangular.all('user/' + userId + '/post');
+    $scope.tweets = baseUrl.getList().$object;
     $("#postTweet").on("click", function() {
       var tweetMsg = $("#tweetMsg").val();
       if(tweetMsg == null || tweetMsg.length == 0){

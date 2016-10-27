@@ -55,7 +55,7 @@ router.post('/user/:userID/post', function (req, res) {
             }
             var tweetId = replies;
             // Post tweet to user's timeline
-            cacheClient.set(constants.tweetPrefix + ":" + tweetId, msg, function (err) {
+            cacheClient.hset(constants.tweetMap, constants.tweetPrefix + ":" + tweetId, msg, function (err) {
                 if (err) {
                     res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
                     return;
@@ -66,24 +66,46 @@ router.post('/user/:userID/post', function (req, res) {
                         res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
                         return;
                     }
-                    // Retrieve all users following current user
-                    cacheClient.lrange(constants.userPrefix + ":" + user + ":" + constants.followers, 0, -1, function (err, replies ) {
-                        replies.forEach(function (reply) {
-                            // Post on all users feed list
-                            cacheClient.lpush(constants.userPrefix + ":" + reply + ":" + constants.newsFeeds, constants.tweetPrefix + ":" + tweetId, function (err) {
+                    // Reverse index - tweetid vs userid
+                    cacheClient.hset(constants.tweetUserMap, constants.tweetPrefix + ":" + tweetId, user, function (err) {
+                        if (err) {
+                            res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
+                            return;
+                        }
+                        // Retrieve all users following current user
+                        cacheClient.smembers(constants.userPrefix + ":" + user + ":" + constants.followers, function (err, replies ) {
+                            if(err){
+                                res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
+                                return;
+                            }
+                            if(replies == null){
+                                // Post on current user's list
+                                cacheClient.lpush(constants.userPrefix + ":" + user + ":" + constants.newsFeeds, constants.tweetPrefix + ":" + tweetId, function (err) {
+                                    if (err) {
+                                        res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
+                                        return;
+                                    }
+                                    res.send(JSON.stringify({msg: "Tweet posted successfully!"}));
+                                });
+                                return;
+                            }
+                            replies.forEach(function (reply) {
+                                // Post on all users feed list
+                                cacheClient.lpush(constants.userPrefix + ":" + reply + ":" + constants.newsFeeds, constants.tweetPrefix + ":" + tweetId, function (err) {
+                                    if (err) {
+                                        res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
+                                        return;
+                                    }
+                                });
+                            });
+                            // Post on current user's list
+                            cacheClient.lpush(constants.userPrefix + ":" + user + ":" + constants.newsFeeds, constants.tweetPrefix + ":" + tweetId, function (err) {
                                 if (err) {
                                     res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
                                     return;
                                 }
+                                res.send(JSON.stringify({msg: "Tweet posted successfully!"}));
                             });
-                        });
-                        // Post on current user's list
-                        cacheClient.lpush(constants.userPrefix + ":" + user + ":" + constants.newsFeeds, constants.tweetPrefix + ":" + tweetId, function (err) {
-                            if (err) {
-                                res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
-                                return;
-                            }
-                            res.send(JSON.stringify({msg: "Tweet posted successfully!"}));
                         });
                     });
                 });
@@ -124,12 +146,22 @@ router.get('/user/:userID/post', function (req, res) {
                 res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
                 return;
             }
-            cacheClient.mget(replies, function (err, replies) {
+            cacheClient.hmget(constants.tweetMap, replies, function (err, replies1) {
                 if (err) {
                     res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
                     return;
                 }
-                res.send(replies);
+                cacheClient.hmget(constants.tweetUserMap, replies, function (err, replies2) {
+                    if (err) {
+                        res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
+                        return;
+                    }
+                    var response = [];
+                    for(var index = 0; index < replies1.length; index++){
+                        response.push({userID: replies2[index], tweet: replies1[index]});
+                    }
+                    res.send(response);
+                });
             });
         });
     });
