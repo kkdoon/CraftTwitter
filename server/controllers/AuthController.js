@@ -3,7 +3,6 @@ var router = express.Router();
 var constants = require('../util/ConstantsUtil');
 var validate = require('../util/RequestValidate');
 var cacheClient = require('../util/CacheConnectionUtil');
-//var model = require('../models/index');
     
 router.post('/signup', function (req, res) {
     validate(req);
@@ -11,18 +10,18 @@ router.post('/signup', function (req, res) {
     var password = req.body.password;
 
     if(!isRequestValid(userName, password)){
-        res.status(400).send(JSON.stringify({err: "Username and password cannot be empty", msg: "Failed to sign-up user"}));
+        res.status(400).send(JSON.stringify({msg: "Username and password cannot be empty", err: "Failed to sign-up user"}));
         return;
     }
 
     // Check if userID exists in cache
     cacheClient.hexists(constants.usersMapKey, userName, function (err, replies) {
         if(err){
-            res.status(500).send(JSON.stringify({err: err, msg: "Please try again later"}));
+            res.status(500).send(JSON.stringify({err: err, msg: "Please try again later..."}));
             return;
         }
         if(replies === 1){
-            res.status(400).send(JSON.stringify({err: "Username exists. Please sign-up with another username", msg: "Failed to sign-up user"}));
+            res.status(400).send(JSON.stringify({msg: "Username exists. Please sign-up with another username", err: "Failed to sign-up user"}));
         }else{// If user does not exists, then add userid in users map
             cacheClient.hset(constants.usersMapKey, userName, 1, function (err, replies) {
                 if(err || replies != 1){
@@ -47,7 +46,7 @@ router.post('/login', function (req, res) {
     var password = req.body.password;
 
     if(!isRequestValid(userName, password)){
-        res.status(400).send(JSON.stringify({err: "Username and password cannot be empty", msg: "Failed to sign-in user"}));
+        res.status(400).send(JSON.stringify({msg: "Username and password cannot be empty", err: "Failed to sign-in user"}));
         return;
     }
 
@@ -57,9 +56,9 @@ router.post('/login', function (req, res) {
             return;
         }
         if(replies == password ) {
-            res.send(JSON.stringify({msg: "Login successful. Welcome " + userName}));
+            res.send(JSON.stringify({msg: "Login successful. Welcome " + userName, userID: userName}));
         }else{
-            res.status(400).send(JSON.stringify({msg: "Login failed. Please make sure username/password is valid"}));
+            res.status(400).send(JSON.stringify({msg: "Login failed. Please make sure username/password is valid", err: "Login failed"}));
         }
     });
 });

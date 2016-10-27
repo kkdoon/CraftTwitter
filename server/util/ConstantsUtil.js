@@ -1,7 +1,9 @@
 var consts = {
     usersMapKey : "users",
     userPrefix : "user",
-    userProfile : "profile"
+    userProfile : "profile",
+    followers: "followers",
+    following: "following"
 };
 
 module.exports = consts;
