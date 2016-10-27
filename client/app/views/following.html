@@ -8,7 +8,7 @@
         <div class="col-sm-9">
           <h4 class="list-group-item-heading">
             <p class="list-group-item-text">
-              <p class="text-muted">@{{userid}}</p>
+              <p class="text-muted">{{userid}}</p>
             </p>
           </h4>
         </div>
@@ -18,21 +18,23 @@
 </div>
 
 <div class="col-md-10 col-md-offset-2">
-  <ul class="list-group">
+  <ul id="nonFollowList" class="list-group">
     <li class="list-group-item">
-      <p style="margin-bottom: 0;" class="lead">People you don't follow</p>
+      <p style="margin-bottom: 0;" class="lead">All users in system</p>
     </li>
-    <li class="list-group-item" ng-repeat="userid in userIDs">
+    <li class="list-group-item" ng-repeat="userid in nonFollowUserIDs">
       <div class="row">
         <div class="col-sm-9">
           <h4 class="list-group-item-heading">
             <p class="list-group-item-text">
-            <p class="text-muted">@{{userid}}</p>
+            <p class="text-muted">{{userid}}</p>
             </p>
           </h4>
         </div>
         <div style="padding-top: 3px; padding-bottom: 3px;" class="col-sm-3">
-            <button type="submit" class="btn btn-default pull-right">Follow</button>
+          <form id="followForm">
+            <button id={{userid}} type="submit" class="btn btn-default pull-right">Follow</button>
+          </form>
         </div>
       </div>
     </li>
