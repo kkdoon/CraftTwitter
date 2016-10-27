@@ -5,16 +5,17 @@ var ldapStrategy = require('passport-ldapauth');
 var constants = require('../util/ConstantsUtil');
 var cacheClient = require('../util/CacheConnectionUtil');
 var validate = require('../util/RequestValidate');
+var settings = require('../config/settings');
 
-var options = {
+/*var options = {
     server: {
-        url: 'ldap://54.172.26.24:389',
+        url: 'ldap://' + host + ':' + port,
         searchBase: 'ou=Users,dc=openstack,dc=org',
         searchFilter: '(uid={{username}})',
     }
-};
+};*/
 
-passport.use(new ldapStrategy(options));
+passport.use(new ldapStrategy(settings.ldap));
 
 /*passport.serializeUser(function(user, done) {
     done(null, user);
