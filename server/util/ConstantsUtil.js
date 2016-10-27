@@ -3,7 +3,11 @@ var consts = {
     userPrefix : "user",
     userProfile : "profile",
     followers: "followers",
-    following: "following"
+    following: "following",
+    posts: "posts",
+    newsFeeds: "feeds",
+    tweetIdKey: "tweets",
+    tweetPrefix: "tweet"
 };
 
 module.exports = consts;

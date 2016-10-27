@@ -30,12 +30,12 @@ router.post('/user/:userID/follow', function (req, res) {
     var user1 = req.params.userID;
     var user2 = req.query.user;
 
-    if(!isRequestValid(user2)){
+    /*if(!isRequestValid(user2)){
         res.status(400).send(JSON.stringify({err: "Follow action cannot be completed", msg: "Username of user to be followed should be provided"}));
         return;
     }
 
-    /*var resp1 = isUserValid(user1);
+    var resp1 = isUserValid(user1);
     if(resp1 != null){
         res.status(resp1.code).send(resp1.val);
         return;
@@ -53,7 +53,7 @@ router.post('/user/:userID/follow', function (req, res) {
             return;
         }
         if (replies === 0) {
-            res.status(500).send(JSON.stringify({
+            res.status(400).send(JSON.stringify({
                 msg: "User " +  user1 + " does not exist. Please provide valid username",
                 err: "Failed to finish follow operation"
             }));
@@ -65,7 +65,7 @@ router.post('/user/:userID/follow', function (req, res) {
                 return;
             }
             if (replies === 0) {
-                res.status(500).send(JSON.stringify({
+                res.status(400).send(JSON.stringify({
                     msg: "User " +  user2 + " does not exist. Please provide valid username",
                     err: "Failed to finish follow operation"
                 }));
